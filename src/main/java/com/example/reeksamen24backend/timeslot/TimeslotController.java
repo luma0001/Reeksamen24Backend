@@ -12,7 +12,7 @@ import java.util.Optional;
 @RequestMapping("timeslots")
 public class TimeslotController {
 
-    private TimeslotService timeslotService;
+    private final TimeslotService timeslotService;
 
     private TimeslotController(TimeslotService timeslotService){
         this.timeslotService = timeslotService;
@@ -39,8 +39,16 @@ public class TimeslotController {
     }
 
 
-    // Have en patch? der kan ændre på events/ slette dem
-    // Kalender med timeslots og deres events
+    @PutMapping("{id}/events")
+    public ResponseEntity<?> updateTimeslotEvents(@PathVariable Long id,
+                                                  @RequestBody List<Long> eventIds) {
+        try {
+            var updatedTimeslot = timeslotService.updateTimeslotEvents(id, eventIds);
+            return updatedTimeslot.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (TimeslotException exception) {
+            return ResponseEntity.badRequest().body(new ErrorResponseDto(exception.getMessage()));
+        }
+    }
 
 
 }

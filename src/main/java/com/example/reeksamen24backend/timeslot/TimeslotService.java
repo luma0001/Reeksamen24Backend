@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class TimeslotService {
 
 
-    private TimeslotRepository timeslotRepository;
-    private EventRepository eventRepository;
+    private final TimeslotRepository timeslotRepository;
+    private final EventRepository eventRepository;
 
     private TimeslotService(TimeslotRepository timeslotRepository,EventRepository eventRepository ){
         this.timeslotRepository = timeslotRepository;
@@ -45,6 +45,39 @@ public class TimeslotService {
         Timeslot savedEntity = timeslotRepository.save(requestToEntity(timeSlotRequestDto));
         return Optional.of(toTimeslotDto(savedEntity));
     }
+
+
+
+    public Optional<TimeslotResponseDto> updateTimeslotEvents(Long timeslotId, List<Long> newEventIds) {
+        Timeslot timeslot = timeslotRepository.findById(timeslotId)
+                .orElseThrow(() -> new RuntimeException("Timeslot not found for ID: " + timeslotId));
+
+        // Fetch existing events from the repository
+        List<Event> existingEvents = timeslot.getEvents();
+        List<Event> newEvents = newEventIds.stream()
+                .map(eventId -> eventRepository.findById(eventId)
+                        .orElseThrow(() -> new RuntimeException("Event not found for ID: " + eventId)))
+                .collect(Collectors.toList());
+
+        // Check for conflicts
+        List<Long> conflictingEventIds = newEvents.stream()
+                .filter(event -> existingEvents.contains(event))
+                .map(Event::getId)
+                .collect(Collectors.toList());
+
+        if (!conflictingEventIds.isEmpty()) {
+            throw new TimeslotException(
+                    "The following event IDs are already associated with this timeslot: " + conflictingEventIds);
+        }
+
+        // Update events
+        timeslot.setEvents(newEvents);
+
+        Timeslot updatedTimeslot = timeslotRepository.save(timeslot);
+        return Optional.of(toTimeslotDto(updatedTimeslot));
+    }
+
+
 
     private Timeslot requestToEntity(TimeslotRequestDto requestDto) {
         Timeslot entity = new Timeslot();
