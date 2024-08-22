@@ -23,7 +23,7 @@ public class Event {
     private Timeslot timeslot;
 
     @ManyToOne
-    @JoinColumn(name = "track_id")
+    @JoinColumn(name = "track_id", nullable = true)
     private Track track;
 
     @ManyToOne
