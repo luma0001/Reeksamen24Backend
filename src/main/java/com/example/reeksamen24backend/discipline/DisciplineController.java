@@ -13,8 +13,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/disciplines")
 public class DisciplineController {
+
     @Autowired
     private DisciplineService disciplineService;
+
+    private DisciplineController(DisciplineService disciplineService){
+        this.disciplineService = disciplineService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DisciplineResponseDto>> getAllDisciplines() {

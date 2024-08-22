@@ -16,4 +16,5 @@ public class EventResponseDto {
     private String participantGender;
     private String participantAgeGroup;
     private Integer maximumParticipants;
+
 }

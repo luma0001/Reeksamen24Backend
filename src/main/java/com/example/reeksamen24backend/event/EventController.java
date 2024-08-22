@@ -40,6 +40,33 @@ public class EventController {
     }
 
 
+//    @PutMapping("/{eventId}/track/{trackId}")
+//    public ResponseEntity<Optional<EventResponseDto>> updateEventTrack(
+//            @PathVariable Long eventId,
+//            @PathVariable Long trackId) {
+//        Optional<EventResponseDto> eventResponseDto = eventsService.updateTrack(eventId, trackId);
+//
+//        if (eventResponseDto.isPresent()) {
+//            return ResponseEntity.ok(eventResponseDto);
+//        }
+//        return ResponseEntity.badRequest().body(Optional.empty());
+//    }
+
+
+    @PutMapping("{id}")
+    public ResponseEntity<EventResponseDto> updateEvent(@PathVariable Long id, @RequestBody EventRequestDto requestDto) {
+        return eventsService.updateEventIfExists(id, requestDto)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<EventResponseDto> deleteEvent(@PathVariable Long id) {
+        return eventsService.deleteById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 
     //-	At Event og Track har samme Disciplin
 
