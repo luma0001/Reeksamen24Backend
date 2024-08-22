@@ -15,8 +15,6 @@ public class Discipline {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
-
-
     private String name;
     private Long ApproxDuration;
 
