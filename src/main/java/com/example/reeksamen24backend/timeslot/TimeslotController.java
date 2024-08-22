@@ -18,10 +18,6 @@ public class TimeslotController {
         this.timeslotService = timeslotService;
     }
 
-    // Create timeslot med en fast start og slut tid
-
-
-
     @GetMapping
     public ResponseEntity<List<TimeslotResponseDto>> getAllTimeslots() {
         var timeslots = timeslotService.findAllTimeslots();
