@@ -24,4 +24,20 @@ public class Track {
 
     @OneToMany
     private List<Discipline> disciplines;
+
+    private Type type;
+    private Shape shape;
+    private Surface surface;
+    private Integer length;
+    private Integer lanes;
+
+    public Track(List<Event> events, List<Discipline> disciplines, Type type, Shape shape, Surface surface, Integer length, Integer lanes) {
+        Events = events;
+        this.disciplines = disciplines;
+        this.type = type;
+        this.shape = shape;
+        this.surface = surface;
+        this.length = length;
+        this.lanes = lanes;
+    }
 }

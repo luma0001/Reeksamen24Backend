@@ -25,4 +25,11 @@ public class Timeslot {
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
+
+    public Timeslot(List<Event> event, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.event = event;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

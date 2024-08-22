@@ -36,4 +36,15 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private ParticipantAgeGroup ParticipantAgeGroup;
     private Integer MaximumParticipants;
+
+
+    public Event(Timeslot timeslot, Track track, Discipline discipline, Long minimumDuration, ParticipantGender participantGender, com.example.reeksamen24backend.event.ParticipantAgeGroup participantAgeGroup, Integer maximumParticipants) {
+        this.timeslot = timeslot;
+        this.track = track;
+        this.discipline = discipline;
+        MinimumDuration = minimumDuration;
+        this.participantGender = participantGender;
+        ParticipantAgeGroup = participantAgeGroup;
+        MaximumParticipants = maximumParticipants;
+    }
 }

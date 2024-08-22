@@ -20,4 +20,9 @@ public class Discipline {
     private Long id;
     private String name;
     private Long ApproxDuration;
+
+    public Discipline(String name, Long approxDuration) {
+        this.name = name;
+        ApproxDuration = approxDuration;
+    }
 }
