@@ -48,46 +48,39 @@ public class EventsService {
     }
 
 
-//    public Optional<EventResponseDto> updateTrack(Long eventId, Long trackId) {
-//        Event event = eventRepository.findById(eventId)
-//                .orElseThrow(() -> new EntityNotFoundException("Event not found"));
-//
-//        Track track = trackRepository.findById(trackId)
-//                .orElseThrow(() -> new EntityNotFoundException("Track not found"));
-//
-//        // Check if the event's discipline is in the track's disciplines list
-//        boolean disciplineMatch = track.getDisciplines().stream()
-//                .anyMatch(discipline -> discipline.equals(event.getDiscipline()));
-//
-//        if (!disciplineMatch) {
-//            throw new IllegalArgumentException("Track disciplines do not match Event discipline");
-//        }
-//
-//        event.setTrack(track);
-//        eventRepository.save(event);
-//
-//        return Optional.of(toEventDto(event));
-//    }
-
-
-
-
-    public Optional<EventResponseDto> updateEventIfExists(Long id, EventRequestDto eventRequestDto) {
-        if (eventRepository.existsById(id)) {
-            Event entity = eventRequestToEntity(eventRequestDto);
-            entity.setId(id);
-            Event updatedEvent = eventRepository.save(entity);
-            return Optional.of(toEventDto(updatedEvent));
-        }
-        return Optional.empty();
-    }
-
-
     @Transactional
-    public Optional<EventResponseDto> deleteById(Long id) {
-        return eventRepository.findById(id).map(event -> {
-            eventRepository.deleteById(id);
-            return toEventDto(event);
+    public Optional<EventResponseDto> updateEventIfExists(Long id, EventRequestDto eventRequestDto) {
+        // Check if the event exists
+        return eventRepository.findById(id).map(existingEvent -> {
+            // Convert the request DTO to an entity
+            Event newEvent = eventRequestToEntity(eventRequestDto);
+
+            // If the event has a track, check if the track's discipline matches the event's discipline
+            if (newEvent.getTrack() != null) {
+                Track track = newEvent.getTrack();
+                Discipline eventDiscipline = newEvent.getDiscipline();
+
+                // Ensure that the discipline of the track is one of the disciplines associated with the track
+                boolean disciplineMatch = track.getDisciplines().stream()
+                        .anyMatch(discipline -> discipline.equals(eventDiscipline));
+
+                if (!disciplineMatch) {
+                    throw new IllegalArgumentException("Track's disciplines do not match the Event's discipline");
+                }
+            }
+
+            // Update the event with the new values
+            existingEvent.setTimeslot(newEvent.getTimeslot());
+            existingEvent.setTrack(newEvent.getTrack());
+            existingEvent.setDiscipline(newEvent.getDiscipline());
+            existingEvent.setMinimumDuration(newEvent.getMinimumDuration());
+            existingEvent.setParticipantGender(newEvent.getParticipantGender());
+            existingEvent.setParticipantAgeGroup(newEvent.getParticipantAgeGroup());
+            existingEvent.setMaximumParticipants(newEvent.getMaximumParticipants());
+
+            // Save and return the updated event
+            Event updatedEvent = eventRepository.save(existingEvent);
+            return toEventDto(updatedEvent);
         });
     }
 
