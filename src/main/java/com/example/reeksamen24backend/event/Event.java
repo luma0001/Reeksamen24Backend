@@ -19,15 +19,15 @@ public class Event {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "timeslot_id", nullable = false)
+    @JoinColumn(name = "timeslot_id")
     private Timeslot timeslot;
 
     @ManyToOne
-    @JoinColumn(name = "track_id", nullable = false)
+    @JoinColumn(name = "track_id")
     private Track track;
 
     @ManyToOne
-    @JoinColumn(name = "discipline_id", nullable = false)
+    @JoinColumn(name = "discipline_id")
     private Discipline discipline;
 
     private Long MinimumDuration;
