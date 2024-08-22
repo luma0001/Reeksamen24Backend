@@ -20,16 +20,17 @@ public class Timeslot {
     private Long id;
 
     @OneToMany
-    private List<Event> event;
+    private List<Event> events;
 
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
 
-    public Timeslot(List<Event> event, LocalDate date, LocalTime startTime, LocalTime endTime) {
-        this.event = event;
+    public Timeslot(List<Event> events, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.events = events;
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
     }
+
 }

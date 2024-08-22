@@ -18,12 +18,18 @@ public class Track {
     @Id
     private Long id;
 
-    @ManyToMany
-    @JoinTable(name = "track_event", joinColumns = @JoinColumn(name = "track_id"), inverseJoinColumns = @JoinColumn(name = "discipline_id"))
-    private List<Event> Events;
 
     @OneToMany
+    private List<Event> events;
+
+    @ManyToMany
+    @JoinTable(
+            name = "track_discipline",
+            joinColumns = @JoinColumn(name = "track_id"),
+            inverseJoinColumns = @JoinColumn(name = "discipline_id")
+    )
     private List<Discipline> disciplines;
+
 
     private Type type;
     private Shape shape;
@@ -32,12 +38,26 @@ public class Track {
     private Integer lanes;
 
     public Track(List<Event> events, List<Discipline> disciplines, Type type, Shape shape, Surface surface, Integer length, Integer lanes) {
-        Events = events;
+        this.events = events;
         this.disciplines = disciplines;
         this.type = type;
         this.shape = shape;
         this.surface = surface;
         this.length = length;
         this.lanes = lanes;
+    }
+
+    @Override
+    public String toString() {
+        return "Track{" +
+                "id=" + id +
+                ", events=" + events +
+                ", disciplines=" + disciplines +
+                ", type=" + type +
+                ", shape=" + shape +
+                ", surface=" + surface +
+                ", length=" + length +
+                ", lanes=" + lanes +
+                '}';
     }
 }
